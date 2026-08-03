@@ -1,0 +1,43 @@
+name: ci
+
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    name: test (${{ matrix.os }})
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Nim
+        uses: jiro4989/setup-nim-action@v2.3.0
+        with:
+          nim-version: "2.0.8"
+
+      - name: Typecheck
+        run: nimble check -y
+
+      - name: Run unit tests
+        run: nimble test -y
+
+      - name: Build release CLI
+        run: nim c -d:release --path:src -o:build/codonatlas src/codonatlas_cli.nim
+
+      - name: Smoke test the CLI
+        shell: bash
+        run: |
+          BIN="build/codonatlas"
+          if [[ "$RUNNER_OS" == "Windows" ]]; then
+            BIN="${BIN}.exe"
+          fi
+          "./${BIN}" tests/data/sample.fasta >/dev/null

@@ -1,0 +1,20 @@
+# Compiler and build output
+nimcache/
+.nimcache/
+nimblecache/
+build/
+*.exe
+*.dll
+*.o
+*.out
+
+# Reports written by the CLI demo
+reports/
+
+# Editors and operating systems
+.idea/
+.vscode/
+*.swp
+*.swo
+.DS_Store
+Thumbs.db

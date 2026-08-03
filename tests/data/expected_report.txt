@@ -1,0 +1,108 @@
+Codon Atlas report
+==================
+Source: sample.fasta
+Generated: 2026-08-02T12:00:00Z
+Records: 2
+Total canonical bases: 181
+
+Nucleotide composition
+----------------------
+Record 1: demo_orf
+  Description: synthetic coding sequence, 144 bp, starts with ATG and ends with TAA
+  Length: 144 canonical bases
+  Bases: A 40  C 31  G 38  T 35  U 0  N 0
+  GC content: 47.9%
+
+Record 2: promoter_fragment
+  Description: synthetic non-coding fragment
+  Length: 37 canonical bases
+  Bases: A 9  C 8  G 9  T 11  U 0  N 0
+  GC content: 45.9%
+
+Overall
+-------
+Total canonical bases: 181
+GC content: 47.5%
+
+K-mer counts (k = 3)
+--------------------------------
+Top 5 of 61 distinct k-mers.
+CGT        8
+GTA        7
+GCG        6
+TCG        6
+AGC        5
+
+Codon usage table (reading frame 0)
+-----------------------------------
+Total codons: 60
+
+Count   Frequency   Per 1000  Codon AA  Amino acid
+--------------------------------------------
+    4      0.0667       66.7  CGU  R   Arginine
+    3      0.0500       50.0  AUG  M   Methionine
+    3      0.0500       50.0  GAC  D   Aspartic acid
+    3      0.0500       50.0  GAU  D   Aspartic acid
+    2      0.0333       33.3  AAG  K   Lysine
+    2      0.0333       33.3  AAU  N   Asparagine
+    2      0.0333       33.3  ACG  T   Threonine
+    2      0.0333       33.3  AGC  S   Serine
+    2      0.0333       33.3  CAC  H   Histidine
+    2      0.0333       33.3  CAG  Q   Glutamine
+    2      0.0333       33.3  GCU  A   Alanine
+    2      0.0333       33.3  GGA  G   Glycine
+    2      0.0333       33.3  GUU  V   Valine
+    2      0.0333       33.3  UAA  *   Stop
+    2      0.0333       33.3  UAC  Y   Tyrosine
+    2      0.0333       33.3  UUC  F   Phenylalanine
+    2      0.0333       33.3  UUG  L   Leucine
+    1      0.0167       16.7  AAA  K   Lysine
+    1      0.0167       16.7  ACU  T   Threonine
+    1      0.0167       16.7  CAU  H   Histidine
+    1      0.0167       16.7  CCA  P   Proline
+    1      0.0167       16.7  CCC  P   Proline
+    1      0.0167       16.7  CGA  R   Arginine
+    1      0.0167       16.7  CUA  L   Leucine
+    1      0.0167       16.7  CUC  L   Leucine
+    1      0.0167       16.7  GAA  E   Glutamic acid
+    1      0.0167       16.7  GAG  E   Glutamic acid
+    1      0.0167       16.7  GCA  A   Alanine
+    1      0.0167       16.7  GCG  A   Alanine
+    1      0.0167       16.7  GGC  G   Glycine
+    1      0.0167       16.7  GUA  V   Valine
+    1      0.0167       16.7  GUC  V   Valine
+    1      0.0167       16.7  UAG  *   Stop
+    1      0.0167       16.7  UAU  Y   Tyrosine
+    1      0.0167       16.7  UCG  S   Serine
+    1      0.0167       16.7  UGG  W   Tryptophan
+    1      0.0167       16.7  UGU  C   Cysteine
+    1      0.0167       16.7  UUU  F   Phenylalanine
+    0      0.0000        0.0  AAC  N   Asparagine
+    0      0.0000        0.0  ACA  T   Threonine
+    0      0.0000        0.0  ACC  T   Threonine
+    0      0.0000        0.0  AGA  R   Arginine
+    0      0.0000        0.0  AGG  R   Arginine
+    0      0.0000        0.0  AGU  S   Serine
+    0      0.0000        0.0  AUA  I   Isoleucine
+    0      0.0000        0.0  AUC  I   Isoleucine
+    0      0.0000        0.0  AUU  I   Isoleucine
+    0      0.0000        0.0  CAA  Q   Glutamine
+    0      0.0000        0.0  CCG  P   Proline
+    0      0.0000        0.0  CCU  P   Proline
+    0      0.0000        0.0  CGC  R   Arginine
+    0      0.0000        0.0  CGG  R   Arginine
+    0      0.0000        0.0  CUG  L   Leucine
+    0      0.0000        0.0  CUU  L   Leucine
+    0      0.0000        0.0  GCC  A   Alanine
+    0      0.0000        0.0  GGG  G   Glycine
+    0      0.0000        0.0  GGU  G   Glycine
+    0      0.0000        0.0  GUG  V   Valine
+    0      0.0000        0.0  UCA  S   Serine
+    0      0.0000        0.0  UCC  S   Serine
+    0      0.0000        0.0  UCU  S   Serine
+    0      0.0000        0.0  UGA  *   Stop
+    0      0.0000        0.0  UGC  C   Cysteine
+    0      0.0000        0.0  UUA  L   Leucine
+
+Codons use RNA letters (U instead of T). AA uses one-letter
+amino acid codes. A '*' marks a stop codon.

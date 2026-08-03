@@ -1,8 +1,9 @@
 ## Codon Atlas: composition statistics for DNA and RNA sequence files.
 ##
-## The package reads FASTA files, computes GC content and k-mer counts, and
-## builds codon usage tables. A CLI writes the results to a plain-text report.
+## The package reads FASTA and FASTQ files, computes GC content and k-mer
+## counts, and builds codon usage tables. It summarizes FASTQ quality scores.
+## A CLI writes the results to a plain-text report.
 
-import codonatlas/[fasta, composition, gencode, codons, report]
+import codonatlas/[fasta, fastq, quality, composition, gencode, codons, report]
 
-export fasta, composition, gencode, codons, report
+export fasta, fastq, quality, composition, gencode, codons, report

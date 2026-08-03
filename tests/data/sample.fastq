@@ -1,0 +1,8 @@
+@read1 synthetic high-quality read, 23 bp
+ATGCGTACGTTAGCCGATGCAGT
++
+IIIIIHHHHHHHHFFFFFFFFFF
+@read2 synthetic low-quality read, 12 bp
+AATTCCGGATCC
++
+!#$%&()*+,-.

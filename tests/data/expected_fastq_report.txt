@@ -1,0 +1,39 @@
+Codon Atlas report
+==================
+Source: sample.fastq
+Generated: 2026-08-02T12:00:00Z
+Records: 2
+Total canonical bases: 35
+
+Nucleotide composition
+----------------------
+Record 1: read1
+  Description: synthetic high-quality read, 23 bp
+  Length: 23 canonical bases
+  Bases: A 5  C 5  G 7  T 6  U 0  N 0
+  GC content: 52.2%
+  Quality: mean 38.3, min 37, max 40
+  Bases below Q20: 0
+
+Record 2: read2
+  Description: synthetic low-quality read, 12 bp
+  Length: 12 canonical bases
+  Bases: A 3  C 4  G 2  T 3  U 0  N 0
+  GC content: 50.0%
+  Quality: mean 7.0, min 0, max 13
+  Bases below Q20: 12
+
+Overall
+-------
+Total canonical bases: 35
+GC content: 51.4%
+
+K-mer counts (k = 3)
+--------------------------------
+Top 3 of 25 distinct k-mers.
+ATG        2
+CCG        2
+CGT        2
+
+Quality scores use the Phred+33 encoding. A higher score
+means a more confident base call.

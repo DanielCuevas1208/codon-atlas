@@ -9,6 +9,8 @@ import std/times
 import codonatlas/codons
 import codonatlas/composition
 import codonatlas/fasta
+import codonatlas/fastq
+import codonatlas/quality
 
 type
   ReportOptions* = object
@@ -16,6 +18,9 @@ type
       ## When greater than 0, add a k-mer count section for this k.
     kmerTop*: int
       ## When greater than 0, show only the top k-mers in that section.
+    qualityThreshold*: int
+      ## When greater than 0, add a below-threshold count for each FASTQ
+      ## record's quality line.
 
 proc cmpKmer(a, b: tuple[key: string, val: int]): int =
   if a.val != b.val:
@@ -29,6 +34,22 @@ proc fmtDecimal(value: float, precision: int): string =
 proc formatCounts(counts: NucleotideCounts): string =
   "A " & $counts.a & "  C " & $counts.c & "  G " & $counts.g &
     "  T " & $counts.t & "  U " & $counts.u & "  N " & $counts.n
+
+proc kmerSection(sequences: openArray[string], k, top: int): seq[string] =
+  var combined = initCountTable[string]()
+  for sequence in sequences:
+    for key, value in kmerCounts(sequence, k):
+      combined.inc(key, value)
+  var items = combined.pairs.toSeq
+  items.sort(cmpKmer)
+  let shown = if top > 0: min(top, items.len) else: items.len
+  result.add ""
+  result.add "K-mer counts (k = " & $k & ")"
+  result.add "--------------------------------"
+  if top > 0:
+    result.add "Top " & $shown & " of " & $items.len & " distinct k-mers."
+  for i in 0 ..< shown:
+    result.add alignLeft(items[i][0], 4) & "  " & align($items[i][1], 6)
 
 proc gcPercentOf(counts: NucleotideCounts): float =
   let total = totalBases(counts)
@@ -86,20 +107,7 @@ proc buildReport*(records: seq[Record], source: string,
   outLines.add "GC content: " & fmtDecimal(gcPercentOf(allCounts), 1) & "%"
 
   if options.kmer > 0:
-    var combined = initCountTable[string]()
-    for record in records:
-      for key, value in kmerCounts(record.sequence, options.kmer):
-        combined.inc(key, value)
-    var items = combined.pairs.toSeq
-    items.sort(cmpKmer)
-    let shown = if options.kmerTop > 0: min(options.kmerTop, items.len) else: items.len
-    outLines.add ""
-    outLines.add "K-mer counts (k = " & $options.kmer & ")"
-    outLines.add "--------------------------------"
-    if options.kmerTop > 0:
-      outLines.add "Top " & $shown & " of " & $items.len & " distinct k-mers."
-    for i in 0 ..< shown:
-      outLines.add alignLeft(items[i][0], 4) & "  " & align($items[i][1], 6)
+    outLines.add kmerSection(records.mapIt(it.sequence), options.kmer, options.kmerTop)
 
   let usage = countCodonUsageMany(records.mapIt(it.sequence))
   outLines.add ""
@@ -123,5 +131,68 @@ proc buildReport*(records: seq[Record], source: string,
   outLines.add ""
   outLines.add "Codons use RNA letters (U instead of T). AA uses one-letter"
   outLines.add "amino acid codes. A '*' marks a stop codon."
+
+  outLines.join("\n") & "\n"
+
+proc buildFastqReport*(records: seq[FastqRecord], source: string,
+                       options = ReportOptions(), generatedAt = ""): string =
+  ## Build a text report for a list of FASTQ records.
+  ##
+  ## `source` names the origin of the data, such as a file path. When
+  ## `generatedAt` is empty, the current UTC time is used.
+  let whenGenerated =
+    if generatedAt.len > 0: generatedAt
+    else: now().utc.format("yyyy-MM-dd'T'HH:mm:ss'Z'")
+
+  var
+    outLines: seq[string]
+    allCounts = NucleotideCounts()
+
+  for record in records:
+    let counts = nucleotideCounts(record.sequence)
+    allCounts.a += counts.a
+    allCounts.c += counts.c
+    allCounts.g += counts.g
+    allCounts.t += counts.t
+    allCounts.u += counts.u
+    allCounts.n += counts.n
+
+  outLines.add "Codon Atlas report"
+  outLines.add "=================="
+  outLines.add "Source: " & source
+  outLines.add "Generated: " & whenGenerated
+  outLines.add "Records: " & $records.len
+  outLines.add "Total canonical bases: " & $totalBases(allCounts)
+  outLines.add ""
+
+  outLines.add "Nucleotide composition"
+  outLines.add "----------------------"
+  for index, record in records:
+    let counts = nucleotideCounts(record.sequence)
+    outLines.add "Record " & $(index + 1) & ": " & record.id
+    if record.description.len > 0:
+      outLines.add "  Description: " & record.description
+    outLines.add "  Length: " & $totalBases(counts) & " canonical bases"
+    outLines.add "  Bases: " & formatCounts(counts)
+    outLines.add "  GC content: " & fmtDecimal(gcPercent(record.sequence), 1) & "%"
+    let summary = qualitySummary(record.quality)
+    outLines.add "  Quality: mean " & fmtDecimal(summary.mean, 1) &
+      ", min " & $summary.min & ", max " & $summary.max
+    if options.qualityThreshold > 0:
+      let below = basesBelowQuality(record.quality, options.qualityThreshold)
+      outLines.add "  Bases below Q" & $options.qualityThreshold & ": " & $below
+    outLines.add ""
+
+  outLines.add "Overall"
+  outLines.add "-------"
+  outLines.add "Total canonical bases: " & $totalBases(allCounts)
+  outLines.add "GC content: " & fmtDecimal(gcPercentOf(allCounts), 1) & "%"
+
+  if options.kmer > 0:
+    outLines.add kmerSection(records.mapIt(it.sequence), options.kmer, options.kmerTop)
+
+  outLines.add ""
+  outLines.add "Quality scores use the Phred+33 encoding. A higher score"
+  outLines.add "means a more confident base call."
 
   outLines.join("\n") & "\n"

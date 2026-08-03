@@ -33,7 +33,7 @@ jobs:
       - name: Build release CLI
         run: nim c -d:release --path:src -o:build/codonatlas src/codonatlas_cli.nim
 
-      - name: Smoke test the CLI
+      - name: Smoke test the FASTA path
         shell: bash
         run: |
           BIN="build/codonatlas"
@@ -41,3 +41,12 @@ jobs:
             BIN="${BIN}.exe"
           fi
           "./${BIN}" tests/data/sample.fasta >/dev/null
+
+      - name: Smoke test the FASTQ path
+        shell: bash
+        run: |
+          BIN="build/codonatlas"
+          if [[ "$RUNNER_OS" == "Windows" ]]; then
+            BIN="${BIN}.exe"
+          fi
+          "./${BIN}" tests/data/sample.fastq --quality=20 --kmer=3 >/dev/null

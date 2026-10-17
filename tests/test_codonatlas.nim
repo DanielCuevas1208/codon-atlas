@@ -238,4 +238,4 @@ suite "report":
     let report = buildReport(records, source = "sample.fasta",
       options = ReportOptions(kmer: 3, kmerTop: 5),
       generatedAt = "2026-08-02T12:00:00Z")
-    check report == readFile(goldenPath())
+    check report == readFile(goldenPath()).replace("\r\n", "\n")
